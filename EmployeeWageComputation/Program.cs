@@ -1,7 +1,8 @@
 ﻿namespace EmployeeWageComputation
 {
-    internal class Program
+   internal  class Program
     {
+
         static void Main(string[] args)
         {   //constants
             const int IS_PART_TIME = 1;
