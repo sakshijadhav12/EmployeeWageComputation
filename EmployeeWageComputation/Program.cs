@@ -10,8 +10,8 @@ namespace EmployeeWageComputation
             EmpWageBuilderObject reliance = new EmpWageBuilderObject("Reliance", 10, 5, 20);
             tcs.computeEmpWage();
             Console.WriteLine(tcs.ToString());
-            reliance.computeEmpWage(); // Fix the variable name "relience" to "reliance"
-            Console.WriteLine(reliance.ToString()); // Fix the variable name "relience" to "reliance"
+            reliance.computeEmpWage(); 
+            Console.WriteLine(reliance.ToString());
         }
     }
 
