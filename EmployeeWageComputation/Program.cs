@@ -2,31 +2,15 @@
 
 namespace EmployeeWageComputation
 {
-    class Program
+    public class CompanyEmpWage
     {
-        static void Main(string[] args)
-        {
-            EmpWageBuilderObject tcs = new EmpWageBuilderObject("TCS", 20, 3, 10);
-            EmpWageBuilderObject reliance = new EmpWageBuilderObject("Reliance", 10, 5, 20);
-            tcs.computeEmpWage();
-            Console.WriteLine(tcs.ToString());
-            reliance.computeEmpWage(); // Fix the variable name "relience" to "reliance"
-            Console.WriteLine(reliance.ToString()); // Fix the variable name "relience" to "reliance"
-        }
-    }
+        public string company;
+        public int empRatePerHrs;
+        public int numOfWorkingDays;
+        public int maxHoursPerMonth;
+        public int totalEmpWage;
 
-    public class EmpWageBuilderObject
-    {
-        const int IS_PART_TIME = 1;
-        const int IS_FULL_TIME = 2;
-
-        private string company;
-        private int empRatePerHrs;
-        private int numOfWorkingDays;
-        private int maxHoursPerMonth;
-        private int totalEmpWage;
-
-        public EmpWageBuilderObject(string company, int empRatePerHrs, int numOfWorkingDays, int maxHoursPerMonth)
+        public CompanyEmpWage(string company, int empRatePerHrs, int numOfWorkingDays, int maxHoursPerMonth)
         {
             this.company = company;
             this.empRatePerHrs = empRatePerHrs;
@@ -34,11 +18,61 @@ namespace EmployeeWageComputation
             this.maxHoursPerMonth = maxHoursPerMonth;
         }
 
+        public void setTotalEmpWage(int totalEmpWage)
+        {
+            this.totalEmpWage = totalEmpWage;
+        }
+
+        public override string ToString()
+        {
+            return "Total Emp Wage for company: " + this.company + " is: " + this.totalEmpWage;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            EmpWageBuilderArray empwageBuilderarray = new EmpWageBuilderArray();
+            empwageBuilderarray.addCompanyEmpWage("TCS", 20, 3, 10);
+            empwageBuilderarray.addCompanyEmpWage("Reliance", 10, 5, 20);
+            empwageBuilderarray.computeEmpWage();
+        }
+    }
+
+    public class EmpWageBuilderArray
+    {
+        const int IS_PART_TIME = 1;
+        const int IS_FULL_TIME = 2;
+
+        private int numOfCompany = 0;
+        private CompanyEmpWage[] CompanyEmpWageArray;
+
+        public EmpWageBuilderArray()
+        {
+            this.CompanyEmpWageArray = new CompanyEmpWage[5];
+        }
+
+        public void addCompanyEmpWage(string company, int empRatePerHrs, int numOfWorkingDays, int maxHoursPerMonth)
+        {
+            CompanyEmpWageArray[this.numOfCompany] = new CompanyEmpWage(company, empRatePerHrs, numOfWorkingDays, maxHoursPerMonth);
+            numOfCompany++;
+        }
+
         public void computeEmpWage()
+        {
+            for (int i = 0; i < numOfCompany; i++)
+            {
+                CompanyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(CompanyEmpWageArray[i]));
+                Console.WriteLine(CompanyEmpWageArray[i].ToString());
+            }
+        }
+
+        public int computeEmpWage(CompanyEmpWage companyEmpWage)
         {
             int empHrs = 0, totalHrs = 0, totalWorkingDays = 0;
             Console.WriteLine("Welcome to EmployeeWageComputation");
-            while (totalHrs <= this.maxHoursPerMonth && totalWorkingDays < this.numOfWorkingDays)
+            while (totalHrs <= companyEmpWage.maxHoursPerMonth && totalWorkingDays < companyEmpWage.numOfWorkingDays)
             {
                 totalWorkingDays++;
                 Random random = new Random();
@@ -62,13 +96,7 @@ namespace EmployeeWageComputation
                 totalHrs += empHrs;
                 Console.WriteLine("Day: " + totalWorkingDays + " Emp Hrs: " + empHrs);
             }
-            totalEmpWage = totalHrs * this.empRatePerHrs;
-            Console.WriteLine("Total emp wage for company " + company + " is: " + totalEmpWage);
-        }
-
-        public string ToString()
-        {
-            return "Total Emp Wage for company: " + this.company + " is: " + this.totalEmpWage;
+            return totalHrs * companyEmpWage.empRatePerHrs;
         }
     }
 }
